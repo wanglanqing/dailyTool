@@ -3,16 +3,19 @@
 # @Author  : wanglanqing
 
 import datetime
+import time
 import requests
 import random
 from hdt_tools.utils.db_info import *
 
 class PreDataBase(object):
-    def __init__(self, demand_user='wlq_client1', demand_pwd='wlq123456', admin_user='test', admin_pwd='!Qq123456'):
+
+    def __init__(self, demand_user='autoadv', demand_pwd='qq123456', admin_user='test', admin_pwd='!Qq123456'):
         self.db = DbOperations()
         self.demand_s = requests.session()
         self.admin_s = requests.session()
         self.demand_url = 'http://api.demand.adhudong.com/api/advert/login.htm?name={0}&password={1}'.format(demand_user, demand_pwd)
+        print self.demand_url
         self.admin_url = 'http://api.admin.adhudong.com/login/login_in.htm?name={0}&pwd={1}'.format(admin_user, admin_pwd)
         print self.demand_url
         self.demand_s.get(self.demand_url)
@@ -41,11 +44,18 @@ class PreDataBase(object):
         print self.demand_s.cookies
         print result.text
 
+    @staticmethod
+    def ts():
+        # time.time()
+        ts=int(round(time.time() * 1000))
+        return str(ts)
+
+
     def __del__(self):
         self.db.close_db()
 
 if __name__ == '__main__':
     pdb = PreDataBase()
-    print pdb.get_keys()
-    # print PreDataBase.get_timedetla(detla=-2)
+    # print pdb.get_keys()
+    print PreDataBase.ts()
     # print PreDataBase.get_random_no(8)
