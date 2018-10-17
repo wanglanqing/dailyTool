@@ -26,6 +26,13 @@ class PreDataBase(object):
         return str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
     @staticmethod
+    def get_today(detla=0):
+        return (datetime.datetime.now()-datetime.timedelta(days=detla)).strftime('%Y%m%d')
+    @staticmethod
+    def get_today_with_delimer(detla=0):
+        return (datetime.datetime.now()-datetime.timedelta(days=detla)).strftime('%Y-%m-%d')
+
+    @staticmethod
     def get_timedetla(detla=1):
         return (datetime.datetime.now()+datetime.timedelta(days=detla)).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -57,5 +64,6 @@ class PreDataBase(object):
 if __name__ == '__main__':
     pdb = PreDataBase()
     # print pdb.get_keys()
-    print PreDataBase.ts()
+    # print PreDataBase.ts()
+    print PreDataBase.get_today()
     # print PreDataBase.get_random_no(8)

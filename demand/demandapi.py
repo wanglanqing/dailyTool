@@ -3,6 +3,7 @@
 # @Author  : wanglanqing
 
 import json
+import string
 from hdt_tools.base.PreDataBase import *
 
 class demandApi(PreDataBase):
@@ -36,10 +37,18 @@ class demandApi(PreDataBase):
 
 
 
+def ad_show():
+    param={'pids':1,'uniq_tag':'11asdsd','ip':'172.16.144.19 ','cookie':'1sadsd222111','device':'IOS','adzone_id':1610,'pos_num':'1_0','act_id':243}
+    param['cookie']=''.join(random.sample(string.ascii_letters+string.hexdigits,8))
+    url = "http://172.16.105.11:17091/ad_bidding.do"
+    re=requests.get(url,params=param)
 
+    print type(re.json())
+    print type(re.text)
 
 
 if __name__ == '__main__':
     da = demandApi()
-    da.get_keys()
+    # da.get_keys()
+    ad_show()
     # da.split_url()
