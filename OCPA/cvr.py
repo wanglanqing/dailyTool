@@ -133,8 +133,29 @@ class CVR(PreDataBase):
         else:
             print cvr_final
 
+    def modifyUrl(self):
+        url = "https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}"
+        for i in range(0,1000):
+            print url.replace('display',str(i)+'display')
+
+    @staticmethod
+    def testmy():
+        mylist=[]
+        for i in range(0,4):
+            mylist.append(i)
+        print mylist
+
 if __name__=='__main__':
-    # c = CVR(3,adv_id=2361,adzone_id=1822,ad_id=1635,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
-    c = CVR(3,adzone_id=1825)
+    # c = CVR(3, adv_id=2361,adzone_id=1822,ad_id=1635,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222231, adzone_id=1823, ad_id=1636,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222234, adzone_id=1824, ad_id=1637,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222238, adzone_id=1825, ad_id=1579,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222247, adzone_id=1826, ad_id=1578,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222502, adzone_id=1827, ad_id=1639,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222263, adzone_id=1828, url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(3, adv_id=2222263, adzone_id=1823, ad_id=1636)
+    c = CVR(3,ad_id=1641)
     # c = CVR()
     c.caculate_cvr()
+    # c.modifyUrl()
+    # CVR.testmy()
