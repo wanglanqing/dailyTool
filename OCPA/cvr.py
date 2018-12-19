@@ -30,7 +30,7 @@ class CVR(PreDataBase):
             d = PreDataBase.get_today(i)
             dd = PreDataBase.get_today_with_delimer(i)
             show_sql= """select count(*) from voyagerlog.ad_show_log{} where status=1""".format(d)
-            click_sql= """select count(*) from voyagerlog.ad_click_log{} where status=1""".format(d)
+            click_sql= """select count(*) ,sum(charge_amount) from voyagerlog.ad_click_log{} where status=1""".format(d)
             effect_sql= """select count(*) from voyagerlog.ad_effect_log_{}""".format(d[4:6])
 
             #1.广告位  + 广告订单 +创意url
@@ -111,8 +111,10 @@ class CVR(PreDataBase):
             #             and adzone_id={}
             #             and url like '%{}%'""".format(d, self.ad_id, self.adzone_id, self.url.split('=')[0])
             # click_num = int(self.db.execute_sql(sql_click_num)[0][0])
-            click_num = int(self.db.execute_sql(click_sql)[0][0])
-            print d+'的点击个数是:',click_num
+            tmp = self.db.execute_sql(click_sql)[0]
+            click_num = int(tmp[0])
+            charge_amount = int(tmp[1])
+            print d+'的点击个数是:',click_num,'消耗:',charge_amount,'效果消耗均价',float(charge_amount/effect_num)
 
 
             if click_num>0:
@@ -154,8 +156,8 @@ if __name__=='__main__':
     # c = CVR(3, adv_id=2222502, adzone_id=1827, ad_id=1639,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
     # c = CVR(3, adv_id=2222263, adzone_id=1828, url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
     # c = CVR(3, adv_id=2222263, adzone_id=1823, ad_id=1636)
-    c = CVR(3,ad_id=1641)
-    # c = CVR()
+    c = CVR(3,adzone_id=1829, ad_id=1641,url='https://display.adhudong.com/new/ad/vipjr.html?utm_click=${click_tag}')
+    # c = CVR(2)
     c.caculate_cvr()
     # c.modifyUrl()
     # CVR.testmy()
