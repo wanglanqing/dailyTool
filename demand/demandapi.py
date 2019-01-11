@@ -51,6 +51,6 @@ def ad_show():
 
 if __name__ == '__main__':
     da = demandApi()
-    da.get_keys('https://apidemand.adhudong.com/api/advert/getCredentialsInfo.htm?uid=2222456')
+    da.get_keys('https://apidemand.adhudong.com/api/crm/summary.htm?aid=2222456')
     # ad_show()
     # da.split_url()
