@@ -6,13 +6,14 @@ import datetime,time,json
 import requests
 
 class cpaData(object):
-    def __init__(self,appKey=None,startTime=None,endTime=None,pageNum=None,pageSize=20):
+    def __init__(self,appKey=None,startTime=None,endTime=None,pageNum=None,pageSize=20,planID=None):
         self.appKey=appKey
         self.startTime=startTime
         self.endTime=endTime
         self.pageNum=pageNum
         self.pageSize=pageSize
         self.ts = int(time.time())
+        self.planId = planID
         pass
 
 
@@ -24,12 +25,22 @@ class cpaData(object):
 #获得appSecret
     def appSecret(self):
         url = "http://api.admin.adhudong.com/cpaExternal/getCpaEffectKey.htm"
-        post_json = {
-            'appKey':self.appKey,
-            'startTime':self.startTime,
-            'endTime':self.endTime,
-            'ts':self.ts
-        }
+
+        if self.planId:
+            post_json = {
+                'appKey': self.appKey,
+                'startTime': self.startTime,
+                'endTime': self.endTime,
+                'ts': self.ts,
+                'planId':self.planId
+            }
+        else:
+            post_json = {
+                'appKey': self.appKey,
+                'startTime': self.startTime,
+                'endTime': self.endTime,
+                'ts': self.ts
+            }
         re = requests.get(url=url, params=post_json)
         return re.text
 
@@ -47,16 +58,27 @@ class cpaData(object):
 #查询我方接口
     def getDatas(self,appSecret):
         url ="http://api.admin.adhudong.com/cpaExternal/cpaEffect.htm"
-        post_json = {
-            'appKey':self.appKey,
-            'appSecret':appSecret,
-            'startTime':self.startTime,
-            'endTime':self.endTime,
-            'pageNum':self.pageNum,
-            'pageSize':self.pageSize,
-            'ts':self.ts
-
-        }
+        if self.planId:
+            post_json = {
+                'appKey':self.appKey,
+                'appSecret':appSecret,
+                'startTime':self.startTime,
+                'endTime':self.endTime,
+                'pageNum':self.pageNum,
+                'pageSize':self.pageSize,
+                'ts':self.ts,
+                'planId': self.planId
+            }
+        else:
+            post_json = {
+                'appKey':self.appKey,
+                'appSecret':appSecret,
+                'startTime':self.startTime,
+                'endTime':self.endTime,
+                'pageNum':self.pageNum,
+                'pageSize':self.pageSize,
+                'ts':self.ts
+            }
         re=requests.get(url=url,params=post_json)
         print re.url
         # print re.content
@@ -80,10 +102,15 @@ class cpaData(object):
                     data_dict["isValid"] = "".encode("utf-8")
 
                 if dict(data[i]).has_key("confirmRemark"):
-                    print type(data[i]['confirmRemark'])
+                    # print type(data[i]['confirmRemark'])
                     data_dict["confirmRemark"] = data[i]['confirmRemark'].encode("utf-8")
                 else:
                     data_dict["confirmRemark"] = "".encode("utf-8")
+
+                if dict(data[i]).has_key('planId'):
+                    data_dict["planId"] = data[i]['planId']
+                else:
+                    data_dict["planId"] = "".encode("utf-8")
                 datas.append(data_dict)
 
         return str(datas)
@@ -105,9 +132,15 @@ class cpaData(object):
         print re.content
 
 if __name__=='__main__':
-    cpd = cpaData(appKey='wlq_client1',startTime='2018-12-17 00:00:00',endTime='2018-12-17 23:59:59',pageNum=1)
+    cpd = cpaData(appKey='adv-kaishen',startTime='2019-01-01 00:00:00',endTime='2019-01-10 23:59:59',pageNum=1,planID=29)
     appSecret =cpd.appSecret()
     appSecret_update = cpd.appSecret_update()
     # print appSecret
-    print cpd.getDatas(appSecret)
+    re= cpd.getDatas(appSecret)
+    re_len = len(re)
+    print re
+
+    # for i in range(re_len):
+    #     print re[i]
+
     # cpd.update_data(appSecret_update,cpd.getDatas(appSecret))
