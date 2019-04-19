@@ -6,7 +6,7 @@ import datetime,time,json
 import requests
 
 class cpaData(object):
-    def __init__(self,appKey=None,startTime=None,endTime=None,pageNum=None,pageSize=20,planID=None):
+    def __init__(self,appKey=None,startTime=None,endTime=None,pageNum=None,pageSize=20,planID=None,mediaId=None,adzoneId=None):
         self.appKey=appKey
         self.startTime=startTime
         self.endTime=endTime
@@ -14,8 +14,8 @@ class cpaData(object):
         self.pageSize=pageSize
         self.ts = int(time.time())
         self.planId = planID
-        pass
-
+        self.mediaId = mediaId
+        self.adzoneId = adzoneId
 
 #获得当前时间，转换为时间戳
     # @staticmethod
@@ -26,22 +26,22 @@ class cpaData(object):
     def appSecret(self):
         url = "http://api.admin.adhudong.com/cpaExternal/getCpaEffectKey.htm"
 
+        post_json = {
+            'appKey': self.appKey,
+            'startTime': self.startTime,
+            'endTime': self.endTime,
+            'ts': self.ts
+        }
         if self.planId:
-            post_json = {
-                'appKey': self.appKey,
-                'startTime': self.startTime,
-                'endTime': self.endTime,
-                'ts': self.ts,
-                'planId':self.planId
-            }
-        else:
-            post_json = {
-                'appKey': self.appKey,
-                'startTime': self.startTime,
-                'endTime': self.endTime,
-                'ts': self.ts
-            }
+            post_json['planId'] = self.planId
+        if self.mediaId:
+            post_json['mediaId'] = self.mediaId
+        if self.adzoneId:
+            post_json['adzoneId'] = self.adzoneId
+        print post_json
         re = requests.get(url=url, params=post_json)
+        # print re.text
+        print re.url
         return re.text
 
     def appSecret_update(self):
@@ -51,42 +51,42 @@ class cpaData(object):
             'ts':self.ts
         }
         re = requests.get(url=url, params=post_json)
-        # print re.url
-        # print re.content
-        return re.text
+        print re.url
+        print re.content
+        print re.text
 
 #查询我方接口
     def getDatas(self,appSecret):
+        '''
+        :param appSecret:
+        mediaId
+        adzoneId
+        :return:
+        '''
         url ="http://api.admin.adhudong.com/cpaExternal/cpaEffect.htm"
+        post_json = {
+            'appKey':self.appKey,
+            'appSecret':appSecret,
+            'startTime':self.startTime,
+            'endTime':self.endTime,
+            'pageNum':self.pageNum,
+            'pageSize':self.pageSize,
+            'ts':self.ts
+        }
         if self.planId:
-            post_json = {
-                'appKey':self.appKey,
-                'appSecret':appSecret,
-                'startTime':self.startTime,
-                'endTime':self.endTime,
-                'pageNum':self.pageNum,
-                'pageSize':self.pageSize,
-                'ts':self.ts,
-                'planId': self.planId
-            }
-        else:
-            post_json = {
-                'appKey':self.appKey,
-                'appSecret':appSecret,
-                'startTime':self.startTime,
-                'endTime':self.endTime,
-                'pageNum':self.pageNum,
-                'pageSize':self.pageSize,
-                'ts':self.ts
-            }
+            post_json['planId'] = self.planId
+        if self.mediaId:
+            post_json['mediaId'] = self.mediaId
+        if self.adzoneId:
+            post_json['adzoneId'] = self.adzoneId
         re=requests.get(url=url,params=post_json)
         print re.url
         # print re.content
         # data=json.dumps(re['data'],encoding='utf-8', ensure_ascii=False)
         data = re.json()['data']
-        data_len = len(data)
         datas = []
         if data:
+            data_len = len(data)
             for i in range(data_len):
                 data_dict={}
                 data_dict["id"]=data[i]['id']
@@ -111,8 +111,18 @@ class cpaData(object):
                     data_dict["planId"] = data[i]['planId']
                 else:
                     data_dict["planId"] = "".encode("utf-8")
+
+                if dict(data[i]).has_key('mediaId'):
+                    data_dict["mediaId"] = data[i]['mediaId']
+                else:
+                    data_dict["mediaId"] = "".encode("utf-8")
                 datas.append(data_dict)
 
+                if dict(data[i]).has_key('adzoneId'):
+                    data_dict["adzoneId"] = data[i]['adzoneId']
+                else:
+                    data_dict["adzoneId"] = "".encode("utf-8")
+        # return len(datas)
         return str(datas)
 
 
@@ -132,12 +142,14 @@ class cpaData(object):
         print re.content
 
 if __name__=='__main__':
-    cpd = cpaData(appKey='adv-kaishen',startTime='2019-01-01 00:00:00',endTime='2019-01-10 23:59:59',pageNum=1,planID=29)
-    appSecret =cpd.appSecret()
-    appSecret_update = cpd.appSecret_update()
+    cpd = cpaData(appKey='adv-kaishen',startTime='2019-04-16 00:00:00',endTime='2019-04-16 23:59:59',planID=42)
+    appSecret=cpd.appSecret()
+    # print cpaData.appSecret
+    # print appSecret
+    # appSecret_update = cpd.appSecret_update()
     # print appSecret
     re= cpd.getDatas(appSecret)
-    re_len = len(re)
+    # re_len = len(re)
     print re
 
     # for i in range(re_len):
