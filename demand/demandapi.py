@@ -13,13 +13,14 @@ class demandApi(PreDataBase):
     def get_keys(self,url):
         # url = 'http://api.demand.adhudong.com/api/voyager/order/list.htm?aid=210'
         # url = "https://apidemand.adhudong.com/api/agent/customer/summary/list.htm?current=1&search=&pageSize=10&level="
-        result = self.demand_s.get(url)
+        # result = self.demand_s.get(url)
+        result = self.admin_s.get(url)
         # print self.demand_s.cookies
         # print result.text
         # print result.text
         # .json()['data']
-        print str(result.json()['data'].keys())[2:-1].replace(" u'",'').replace("'",'')
-        # print str(result.json()['data']['data'][0].keys())[3:-2] .replace(" u'",'').replace("'",'')
+        # print str(result.json()['data'].keys())[2:-1].replace(" u'",'').replace("'",'')
+        print str(result.json()['data']['data'][0].keys())[3:-2] .replace(" u'",'').replace("'",'')
         # print str(result.json()['data'].keys())[3:-2].replace(" u'", '').replace("'", '')
 
 
@@ -48,9 +49,14 @@ def ad_show():
     print type(re.json())
     print type(re.text)
 
+def sendSMS():
+    requests.get('http://api.demand.adhudong.com/api/phone/sendAgentLoginCode.htm?name=wlq_agent&phone=13800000012')
+
+
+
 
 if __name__ == '__main__':
     da = demandApi()
-    da.get_keys('https://apidemand.adhudong.com/api/crm/summary.htm?aid=2222456')
+    da.get_keys('http://api.admin.adhudong.com/reportdaily/reportZone.htm?allDate=&page=1&page_size=100&date_begin=datetime_eq_2019%2F05%2F06&date_end=datetime_eq_2019%2F05%2F06&pageSize=1')
     # ad_show()
     # da.split_url()
