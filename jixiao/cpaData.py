@@ -4,6 +4,7 @@
 
 import datetime,time,json
 import requests
+import urlparse
 
 class cpaData(object):
     def __init__(self,appKey=None,startTime=None,endTime=None,pageNum=None,pageSize=20,planID=None,mediaId=None,adzoneId=None):
@@ -48,12 +49,14 @@ class cpaData(object):
         url = "http://api.admin.adhudong.com/cpaExternal/cpaEffectUpdateKey.htm"
         post_json = {
             'appKey':self.appKey,
-            'ts':self.ts
+            'ts':self.ts,
+            # 'startTime':self.startTime,
+            # 'endTime':self.endTime
         }
         re = requests.get(url=url, params=post_json)
         print re.url
-        print re.content
-        print re.text
+        # print re.content
+        return re.text
 
 #查询我方接口
     def getDatas(self,appSecret):
@@ -80,7 +83,8 @@ class cpaData(object):
         if self.adzoneId:
             post_json['adzoneId'] = self.adzoneId
         re=requests.get(url=url,params=post_json)
-        print re.url
+        print 'get url is :'
+        print urlparse.unquote((re.url).decode("utf-8"))
         # print re.content
         # data=json.dumps(re['data'],encoding='utf-8', ensure_ascii=False)
         data = re.json()['data']
@@ -127,7 +131,7 @@ class cpaData(object):
 
 
 
-    def update_data(self,appSecret,info):
+    def update_data(self,appSecret,info=None):
         url = "http://api.admin.adhudong.com/cpaExternal/cpaEffectUpdate.htm"
         # , {"id": 1, "isValid": 1, "confirmRemark": "", "assessValid": 1, "createTime": "2018-11-30 13: 00: 00"}
         # info="""[{"id": 51,"isValid": 3,"confirmRemark": "","assessValid":"3" ,"createTime": "2018-12-06 17:10:06" }, {"id": 52, "isValid": 2, "confirmRemark": "", "assessValid": 1, "createTime": "2018-12-06 17:10:06"}]"""
@@ -141,18 +145,33 @@ class cpaData(object):
         print re.url
         print re.content
 
-if __name__=='__main__':
-    cpd = cpaData(appKey='adv-kaishen',startTime='2019-04-16 00:00:00',endTime='2019-04-16 23:59:59',planID=42)
-    appSecret=cpd.appSecret()
-    # print cpaData.appSecret
-    # print appSecret
-    # appSecret_update = cpd.appSecret_update()
-    # print appSecret
-    re= cpd.getDatas(appSecret)
-    # re_len = len(re)
-    print re
 
-    # for i in range(re_len):
-    #     print re[i]
+    def update_data_new(self,appSecret=None,info=None):
+        url = "http://api.admin.adhudong.com/cpaExternal/cpaEffectUpdateNew.htm"
+        post_json = {
+            'planId': self.planId,
+            'appKey': self.appKey,
+            'appSecret': appSecret,
+            'ts': self.ts,
+            'array':info,
+            'adzoneId':self.adzoneId,
+            # 'mediaId':self.mediaId
+        }
+        re=requests.get(url=url, params=post_json)
+        print urlparse.unquote((re.url).decode("utf-8"))
+        print re.content
+
+if __name__=='__main__':
+    #
+    cpd = cpaData(appKey='adv-kaishen',startTime = '2019-05-14 15:42:00', endTime = '2019-05-14 16:12:00')
+    appSecret=cpd.appSecret()
+    # appSecret=cpd.appSecret_update()
+    re= cpd.getDatas(appSecret)
+    print re
+    # '考核确认 1-有效  2-无效 3-待定',
+    info = '[{"date":"2018-12-28",' \
+           '"assValidNum":1,"assInvalidNum":1,"assDeterNum":0,"type":2}]'
+    # print cpd.update_data_new(appSecret, info)
+
 
     # cpd.update_data(appSecret_update,cpd.getDatas(appSecret))
