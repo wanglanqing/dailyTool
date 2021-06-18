@@ -10,13 +10,13 @@ from openpyxl import Workbook
 def myc(env):
     # db = mysql.connect(host='221.122.127.183',user='voyager',passwd='voyager',db='voyager',port=5701,charset='utf8')
     if env=='testvoyager':
-        db = mysql.connect(host='172.16.105.12',user='voyager',passwd='voyager',db='voyager',port=5701,charset='utf8')
+        db = mysql.connect(host='xx',user='xx',passwd='xx',db='xx',port=5701,charset='utf8')
     if env=='testtest':
-        db = mysql.connect(host='172.16.105.12',user='voyager',passwd='voyager',db='test',port=5701,charset='utf8')
+        db = mysql.connect(host='xx',user='x',passwd='x',db='xx',port=5701,charset='utf8')
     if env=='devvoyager':
-        db = mysql.connect(host='123.59.17.42',user='voyager',passwd='SIkxiJI5r48JIvPh',db='voyagerlog',port=3306,charset='utf8')
+        db = mysql.connect(host='xx',user='x',passwd='x',db='xxx',port=3306,charset='utf8')
     if env=='nomandytest':
-        db = mysql.connect(host='172.16.105.12',user='voyager',passwd='voyager',db='normandy',port=5701,charset='utf8')
+        db = mysql.connect(host='xx',user='x',passwd='x',db='xx',port=5701,charset='utf8')
 
     db.autocommit(True)
     myc=db.cursor()
