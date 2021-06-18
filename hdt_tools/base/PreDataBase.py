@@ -10,7 +10,7 @@ from hdt_tools.utils.db_info import *
 
 class PreDataBase(object):
 
-    def __init__(self, demand_user='autoadv', demand_pwd='qq123456', admin_user='test', admin_pwd='!Qq123456'):
+    def __init__(self, demand_user='xxx', demand_pwd='xxx', admin_user='xxxx', admin_pwd='!xxxx'):
         self.db = DbOperations()
         self.demand_s = requests.session()
         self.admin_s = requests.session()
